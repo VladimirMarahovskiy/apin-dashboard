@@ -6,12 +6,6 @@ Replace Chrome's default new tab with your own personal dashboard — quick link
 
 ---
 
-## Preview
-
-> _Coming soon — screenshots will be added here_
-
----
-
 ## Features at a Glance
 
 | | |
