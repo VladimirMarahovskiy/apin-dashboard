@@ -8,7 +8,12 @@ Replace Chrome's default new tab with your own personal dashboard — quick link
 
 ## Preview
 
-> _Coming soon — screenshots will be added here_
+**Main**
+![Apin Dashboard](assets/screenshot-main.jpg)
+**Settings**
+![Apin Dashboard](assets/screenshot-settings.jpg)
+**Create group**
+![Apin Dashboard](assets/screenshot-create-group.jpg)
 
 ---
 
@@ -36,7 +41,7 @@ Chrome Web Store listing is coming. Until then, install directly from source —
 Click the green **Code** button on this page → **Download ZIP**, then unzip the file.  
 Or clone with git:
 ```
-git clone https://github.com/YOUR_USERNAME/apin-dashboard.git
+git clone https://github.com/VladimirMarahovskiy/apin-dashboard.git
 ```
 
 **Step 2 — Open Chrome Extensions**
@@ -49,7 +54,7 @@ Toggle the **Developer mode** switch in the top-right corner of the Extensions p
 
 **Step 4 — Load the extension**
 
-Click **Load unpacked** and select the `velvet-v2` folder (the one that contains `manifest.json`).
+Click **Load unpacked** and select the `apin-dashboard` folder (the one that contains `manifest.json`).
 
 **Step 5 — Done!**
 
