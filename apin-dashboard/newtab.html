@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apin Dashboard</title>
+  <link rel="stylesheet" href="css/tailwind.css" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<!-- Background layers -->
+<div id="bg-layer"></div>
+<div id="bg-overlay"></div>
+<div id="sidebar-overlay"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     SETTINGS SIDEBAR
+═════════════════════════════════════════════════════════ -->
+<aside id="settings-sidebar">
+  <div class="sidebar-inner">
+
+    <div class="sidebar-hd">
+      <span class="sidebar-title">Settings</span>
+      <button class="icon-btn" id="settings-close-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Background -->
+    <div class="sb-section">
+      <div class="sb-label">Background Image</div>
+      <input class="sb-input" id="setting-bg-url" type="url" placeholder="Paste image URL…" />
+      <label class="file-label">Upload image
+        <input type="file" id="setting-bg-file" accept="image/*" style="display:none" />
+      </label>
+      <button class="btn-ghost sm" id="clear-bg-btn">Clear background</button>
+    </div>
+
+    <hr class="sb-divider" />
+
+    <!-- Opacity -->
+    <div class="sb-section">
+      <div class="sb-label">Widget Opacity</div>
+      <div class="slider-row">
+        <input type="range" id="setting-opacity" min="0.1" max="1" step="0.05" value="0.82" />
+        <span id="opacity-value">82%</span>
+      </div>
+    </div>
+
+    <hr class="sb-divider" />
+
+    <!-- Color scheme -->
+    <div class="sb-section">
+      <div class="sb-label">Color Scheme</div>
+      <select class="sb-select" id="setting-scheme">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="custom">Custom</option>
+      </select>
+      <div id="custom-colors-section" style="display:none">
+        <div class="color-grid">
+          <div class="color-item"><span>Background</span><input type="color" id="cc-bg"     value="#0d0d1a" /></div>
+          <div class="color-item"><span>Widget</span>    <input type="color" id="cc-widget" value="#16162a" /></div>
+          <div class="color-item"><span>Accent</span>    <input type="color" id="cc-accent" value="#7c6af7" /></div>
+          <div class="color-item"><span>Text</span>      <input type="color" id="cc-text"   value="#e2e0ff" /></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="sb-divider" />
+
+    <!-- Search engine -->
+    <div class="sb-section">
+      <div class="sb-label">Search Engine</div>
+      <select class="sb-select" id="setting-search-engine">
+        <option value="google">Google</option>
+        <option value="bing">Bing</option>
+        <option value="duckduckgo">DuckDuckGo</option>
+        <option value="brave">Brave Search</option>
+        <option value="custom">Custom URL</option>
+      </select>
+      <div id="search-custom-row" style="display:none;flex-direction:column;gap:4px">
+        <input class="sb-input" id="setting-search-custom" type="url" placeholder="https://search.example.com/?q=" />
+      </div>
+    </div>
+
+    <hr class="sb-divider" />
+
+    <!-- Logo widget -->
+    <div class="sb-section">
+      <div class="sb-label">Logo Widget</div>
+      <label class="toggle-row">
+        <input type="checkbox" id="setting-logo-enabled" checked />
+        <span>Show logo</span>
+      </label>
+      <select class="sb-select" id="setting-logo-type">
+        <option value="text">Text logo</option>
+        <option value="image">Image logo</option>
+      </select>
+      <div id="logo-text-row" style="display:flex;flex-direction:column;gap:4px">
+        <input class="sb-input" id="setting-logo-text" type="text" placeholder="Your logo text" value="Apin Dashboard" maxlength="30" />
+      </div>
+      <div id="logo-image-row" style="display:none;flex-direction:column;gap:4px">
+        <input class="sb-input" id="setting-logo-url" type="url" placeholder="Image URL…" />
+        <label class="file-label">Upload logo image
+          <input type="file" id="setting-logo-file" accept="image/*" style="display:none" />
+        </label>
+      </div>
+    </div>
+
+    <hr class="sb-divider" />
+
+    <!-- Export / Import -->
+    <div class="sb-section">
+      <div class="sb-label">Backup &amp; Restore</div>
+      <p class="sb-hint">Export all settings &amp; bookmarks to JSON. Import to restore on any device or after renaming the folder.</p>
+      <button class="btn-outline" id="export-btn">Export JSON</button>
+      <label class="file-label">Import JSON
+        <input type="file" id="import-file" accept=".json,application/json" style="display:none" />
+      </label>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN APP
+═════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- TOP BAR: Clock + Search -->
+  <header id="topbar">
+    <div id="clock-block">
+      <div id="clock-time">00:00</div>
+      <div id="clock-date">Loading…</div>
+    </div>
+
+    <!-- Search bar -->
+    <form id="search-form" action="https://www.google.com/search" method="get" target="_self">
+      <div class="search-wrap">
+        <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" name="q" id="search-input" class="search-input" placeholder="Search…" autocomplete="off" />
+        <button type="submit" class="search-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </form>
+
+    <div id="topbar-right" class="gap-4">
+       <button class="btn-outline sm" id="add-group-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        New Group
+      </button>
+      <button class="icon-btn" id="settings-toggle-btn" title="Settings">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- LOGO WIDGET -->
+  <div id="logo-widget"></div>
+
+  <!-- QUICK LINKS (main row, large icons) -->
+  <section id="quick-links-section">
+    <div id="quick-links-row"></div>
+  </section>
+
+  <!-- BOOKMARK GROUPS -->
+  <section id="groups-section">
+    <div id="groups-header">
+    </div>
+    <div id="groups-container"></div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     MODALS
+═════════════════════════════════════════════════════════ -->
+
+<!-- Add Group -->
+<div class="modal-backdrop hidden" id="add-group-modal">
+  <div class="modal-box">
+    <div class="modal-title">Create Group</div>
+    <div class="modal-field">
+      <label class="modal-label">Name</label>
+      <input class="sb-input" id="modal-group-title" type="text" placeholder="Work, Dev Tools, Social…" maxlength="40" />
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Accent color</label>
+      <input type="color" id="modal-group-color" value="#7c6af7" style="width:100%;height:40px;border-radius:8px;border:1px solid var(--c-border);background:transparent;cursor:pointer;padding:3px" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="add-group-cancel">Cancel</button>
+      <button class="btn-primary" id="add-group-confirm">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Quick Link -->
+<div class="modal-backdrop hidden" id="ql-modal">
+  <div class="modal-box">
+    <div class="modal-title">Add Quick Link</div>
+    <div class="modal-field">
+      <label class="modal-label">Title</label>
+      <input class="sb-input" id="ql-modal-title" type="text" placeholder="Google" maxlength="30" />
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">URL</label>
+      <input class="sb-input" id="ql-modal-url" type="url" placeholder="https://…" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="ql-modal-cancel">Cancel</button>
+      <button class="btn-primary" id="ql-modal-confirm">Add</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/sortable.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
